@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Teacher Panel | Appointment Reminder{% endblock %}
+
+{% block content %}
+  <section class="card">
+    <div class="section-heading">
+      <div class="heading-title-group"><h2>Teacher Panel</h2></div>
+      {% if signed_in %}
+        <form method="post" action="{{ url_for('teacher_logout') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button type="submit" class="button button-outline">Sign Out</button>
+        </form>
+      {% endif %}
+    </div>
+
+    {% if not configured %}
+      <p>Set the TEACHER_PASSWORD environment variable and restart the app to enable teacher approval.</p>
+    {% elif not signed_in %}
+      <form method="post" class="form-card">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="form-group">
+          <label for="password">Teacher password</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="button">Sign In</button>
+      </form>
+    {% elif appointments %}
+      <div class="appointment-list">
+        {% for item in appointments %}
+          <article class="appointment-card">
+            <div>
+              <div class="appointment-header">
+                <h3 class="appointment-title">{{ item.title }}</h3>
+                <span class="status-pill status-pending">Pending approval</span>
+              </div>
+              <p class="appointment-meta">{{ item.appointment_date|replace('T', ' at ') }}</p>
+              {% if item.notes %}<div class="appointment-notes"><p>{{ item.notes }}</p></div>{% endif %}
+            </div>
+            <form method="post" class="appointment-actions" action="{{ url_for('approve_appointment', appointment_id=item.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <input type="hidden" name="revision" value="{{ item.revision }}">
+              <button type="submit" class="button" aria-label="Approve {{ item.title }}">Approve</button>
+            </form>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No requests are waiting for approval.</p>
+    {% endif %}
+  </section>
+{% endblock %}

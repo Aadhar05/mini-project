@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Appointment Reminder | Campus Academic Portal{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <!-- Ambient 3D Aurora Glow Orbs (Pure CSS) -->
+  <div class="ambient-decor" aria-hidden="true">
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+  </div>
+
+  <!-- Sleek Floating Campus Navigation Topbar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand-wrapper" href="{{ url_for('index') }}" title="Appointment Reminder - Academic Portal">
+        <div class="brand-icon-box" aria-hidden="true">
+          <!-- Academic Graduation Cap & University Shield SVG Icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Appointment Reminder</span>
+          <span class="brand-subtitle">Campus Academic Portal</span>
+        </div>
+      </a>
+
+      <nav class="topbar-nav" aria-label="Portal Navigation">
+        <div class="portal-badge" aria-label="Current Academic Session">
+          <span class="portal-dot"></span>
+          <span>Fall Term • 2026</span>
+        </div>
+        <div class="student-chip" aria-label="Current User Session">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>Student</span>
+        </div>
+        <a class="button button-outline" href="{{ url_for('teacher_dashboard') }}">Teacher Panel</a>
+        <a class="button button-light" href="{{ url_for('add_appointment') }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>Request Appointment</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Portal Content Container -->
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="messages" role="alert">
+          {% for category, message in messages %}
+            <div class="message {{ category }}">
+              {% if category == 'success' %}
+                <!-- Success Checkmark SVG Icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              {% else %}
+                <!-- Error / Alert SVG Icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+              {% endif %}
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Presentation Footer -->
+  <footer class="portal-footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Appointment Reminder System</strong> • College Mini Project
+      </div>
+      <div class="footer-tags">
+        <span class="footer-tag">Python Flask &amp; SQLite</span>
+        <span class="footer-tag">•</span>
+        <span class="footer-tag">Glassmorphic Campus UI</span>
+        <span class="footer-tag">•</span>
+        <span class="footer-tag">Responsive 3D Layout</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

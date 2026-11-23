@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}{% if appointment %}Edit{% else %}Book{% endif %} Appointment | Student Academic Portal{% endblock %}
+
+{% block content %}
+  <!-- Header / Breadcrumb Heading -->
+  <section class="hero-banner" style="margin-bottom: 24px;">
+    <div class="hero-content">
+      <div class="eyebrow-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>Academic Appointment Scheduler</span>
+      </div>
+      <h1 class="hero-title">
+        {% if appointment %}Edit <span class="gradient-text">Appointment</span>{% else %}Book an <span class="gradient-text">Appointment</span>{% endif %}
+      </h1>
+      <p class="hero-desc">Enter your consultation details below. Use your local device time for accurate automated 24-hour reminder calculation.</p>
+    </div>
+    <div>
+      <a class="button button-outline" href="{{ url_for('index') }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Back to Schedule</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Modern Academic Form Glass Card -->
+  <section class="card form-card">
+    <form method="post" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <!-- Title Input -->
+      <div class="form-group">
+        <label for="title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          <span>Appointment Title *</span>
+        </label>
+        <input 
+          id="title" 
+          name="title" 
+          type="text" 
+          maxlength="100" 
+          required 
+          placeholder="e.g. Major Project Review with Guide / Lab Viva" 
+          value="{{ request.form.get('title', appointment.title if appointment else '') }}"
+          autocomplete="off">
+        <p class="input-hint-text">A concise headline identifying the meeting reason or professor name (max 100 characters).</p>
+      </div>
+
+      <!-- Date & Time Input -->
+      <div class="form-group">
+        <label for="appointment_date">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Date and Time *</span>
+        </label>
+        <input 
+          id="appointment_date" 
+          name="appointment_date" 
+          type="datetime-local" 
+          required 
+          value="{{ request.form.get('appointment_date', appointment.appointment_date if appointment else '') }}">
+        <p class="input-hint-text">Choose your preferred date and time. Approved appointments appear in reminders within 24 hours of the appointment.</p>
+      </div>
+
+      <!-- Notes Textarea -->
+      <div class="form-group">
+        <label for="notes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <span>Meeting Notes <span class="label-hint">(Optional)</span></span>
+        </label>
+        <textarea 
+          id="notes" 
+          name="notes" 
+          rows="4" 
+          maxlength="500" 
+          placeholder="Room / lab number, questions to ask, documents or project reports to bring...">{{ request.form.get('notes', appointment.notes if appointment else '') }}</textarea>
+        <p class="input-hint-text">Add any preparation instructions, syllabus topics, or location details (max 500 characters).</p>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <a class="button button-outline" href="{{ url_for('index') }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          <span>Cancel</span>
+        </a>
+        <button class="button button-lg" type="submit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>{% if appointment %}Save Changes{% else %}Submit Request{% endif %}</span>
+        </button>
+      </div>
+    </form>
+  </section>
+{% endblock %}
